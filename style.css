@@ -1,0 +1,123 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    font-family: sans-serif;
+    font-size: 1rem;
+    color: #444;
+}
+
+#app {
+    max-width: 450px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+form {
+    display: flex;
+    margin-bottom: 2rem;
+    flex-direction: column;
+}
+
+form>label {
+    /*position: absolute;*/
+    /*float: left;*/
+    padding: 0.6rem;
+    /*margin-right: 2rem;*/
+}
+
+[type='text'],
+button {
+    display: inline-block;
+    -webkit-appearance: none;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border: 2px solid blue;
+    border-radius: 4px;
+}
+
+button {
+    cursor: pointer;
+    background: blue;
+    color: white;
+    margin: 0 0.5rem;
+}
+
+[type='text'] {
+    width: 100%;
+}
+
+[type='text']:active,
+[type='text']:focus {
+    outline: 0;
+    border: 2px solid #007bff;
+}
+
+[type='checkbox'] {
+    margin-right: 1rem;
+    font-size: 2rem;
+}
+
+h1 {
+    color: blue;
+}
+
+ul {
+    padding: 0;
+}
+
+li {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid black;
+    border-radius: 4px;
+}
+
+li span {
+    display: inline-block;
+    padding: 0.5rem;
+    width: 250px;
+    border-radius: 4px;
+    border: 2px solid transparent;
+}
+
+li span:hover {
+    background: rgba(179, 215, 255, 0.52);
+}
+
+li span:focus {
+    outline: 0;
+    border: 2px solid #007bff;
+    background: rgba(179, 207, 255, 0.52);
+}
+
+span.category {
+    width: fit-content;
+    text-align: end;
+    font-weight: bold;
+}
+
+button.delete {
+    background-color: #273746;
+    border: unset;
+}
+
+div.container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+select.selectButton {
+    border: 2px solid blueviolet;
+    padding: 0.5rem;
+    margin: 1rem;
+}
