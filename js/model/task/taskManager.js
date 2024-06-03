@@ -1,3 +1,6 @@
+import {SELECT_AUCUN, SELECT_DIVERS, SELECT_MAISON, SELECT_TRAVAIL} from "../../view/task/variable.js";
+import {AdvancedTask} from "./advancedTask.js";
+
 export class TaskManager {
 
     constructor() {
@@ -12,8 +15,7 @@ export class TaskManager {
     addTask(task) {
         task.id = this.generateUniqueId();
         this.tasks.push(task);
-        console.log(task);
-        console.log(this.tasks);
+        this.tasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
         return task.id;
     }
 
@@ -48,5 +50,31 @@ export class TaskManager {
             result += characters[randomIndex];
         }
         return result;
+    }
+
+    sortListBy(typeSort, asc = true) {
+        switch (typeSort) {
+            case "date":
+                if (asc) {
+                    this.tasks.sort((b, a) => new Date(b.dueDate) - new Date(a.dueDate));
+                } else {
+                    this.tasks.sort((a, b) => new Date(b.dueDate) - new Date(a.dueDate));
+                }
+                break;
+            case SELECT_MAISON:
+                return this.tasks.filter(task => task.category === typeSort);
+
+            case SELECT_TRAVAIL:
+                return this.tasks.filter(task => task.category === typeSort);
+
+            case SELECT_DIVERS:
+                return this.tasks.filter(task => task.category === typeSort);
+
+            case SELECT_AUCUN:
+                return this.tasks.filter(task => !(task instanceof AdvancedTask));
+
+            case "Search...":
+                return this.tasks;
+        }
     }
 }

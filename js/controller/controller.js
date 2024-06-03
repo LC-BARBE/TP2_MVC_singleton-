@@ -1,12 +1,8 @@
 import {TaskManager} from "../model/task/taskManager.js";
 import {AdvancedTask} from "../model/task/advancedTask.js";
 import {ViewList} from "../view/viewList.js";
-import {Task} from "../model/task/task.js";
 import {SimpleTask} from "../model/task/simpleTask.js";
-
-const INPUT_TITLE = "title";
-const INPUT_DESCRIPTION = "description";
-const INPUT_CATEGORY = "category";
+import {INPUT_CATEGORY, INPUT_DESCRIPTION, INPUT_TITLE} from "../view/task/variable.js";
 
 export class Controller {
 
@@ -16,36 +12,42 @@ export class Controller {
         this.init();
     }
 
+    addTasksWithDelay(taskList, tasks) {
+        tasks.forEach((task, index) => {
+            task.dueDate.setTime(new Date().getTime() + (index * 1000));
+            taskList.addTask(task);
+            if (index === tasks.length - 1) {
+                this._taskList.sortListBy("date", false);
+                this.showTaskList();
+            }
+        });
+    }
+
     init() {
-        this._taskList.addTask(new Task(null, "Title 1", "description"))
-        this._taskList.addTask(new AdvancedTask(null, "Title 2", "description", null, null, "Divers"))
-        this._taskList.addTask(new AdvancedTask(null, "Title 3", "description", null, null, "Travail"))
-        this._taskList.addTask(new AdvancedTask(null, "Title 4", "description", null, null, "Maison"))
-        this.showTaskList();
+        const now = new Date();
+        const tasks = [new SimpleTask(null, "Title 1", "description", now), new AdvancedTask(null, "Title 2", "description", now, null, "Divers"), new AdvancedTask(null, "Title 3", "description", now, null, "Travail"), new AdvancedTask(null, "Title 4", "description", now, null, "Maison"),];
+        this.addTasksWithDelay(this._taskList, tasks);
     }
 
     addTask(task) {
         let newTask;
         if (task instanceof AdvancedTask) {
             newTask = new AdvancedTask(null, task.title, task.description, null, null, task.category);
-        }
-        if (task instanceof SimpleTask) {
+        } else if (task instanceof SimpleTask) {
             newTask = new SimpleTask(null, task.title, task.description);
         }
         this._taskList.addTask(newTask);
+        this._taskList.sortListBy("date", false);
         this.showTaskList();
     }
 
     showTaskList() {
-        this._viewList.displayTodos(this._taskList.getTasks());
+        this._viewList.displayTasks(this._taskList.getTasks());
     }
 
     updateTask(id, attribute, change) {
 
-        console.log(this._taskList.getById(id));
         let taskEdit = this._taskList.getById(id);
-
-        console.log(attribute);
 
         if (attribute === INPUT_TITLE) {
             taskEdit.title = change
@@ -59,16 +61,31 @@ export class Controller {
             taskEdit.category = change
         }
 
-        this.showTaskList()
 
+        if (taskEdit.category) {
+            let taskTemp = taskEdit;
+            taskEdit = new AdvancedTask();
+            taskEdit.id = taskTemp.id;
+            taskEdit.title = taskTemp.title;
+            taskEdit.description = taskTemp.description;
+            taskEdit.dueDate = taskTemp.dueDate;
+            taskEdit.category = taskTemp.category;
+        }
+
+        this._taskList.deleteTask(taskEdit.id)
+        this._taskList.addTask(taskEdit)
+        this.showTaskList()
         return taskEdit;
     }
 
     deleteTask(id) {
-        console.log(id);
-        console.log(this._taskList.deleteTask(id));
+        this._taskList.deleteTask(id);
+        this.showTaskList();
+        return true
+    }
 
-        this._viewList.displayTodos(this._taskList.getTasks());
+    searchByCategory(typeCategory) {
+        this._viewList.displayTasks(this._taskList.sortListBy(typeCategory));
         return true
     }
 }
